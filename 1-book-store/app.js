@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
 //res.send('hi, I am a normal text')
 //res.sendFile(__dirname +  '/somefile.txt');
     //res.sendFile(__dirname + '/myhtml/main.html')
-    res.render('main', {name: "home", nav: navObj});
+    res.render('main', {name: "Home", nav: navObj, current: 'Home'});
 })
 
 app.get('/about', (req, res) => {
@@ -35,7 +35,7 @@ app.get('/about', (req, res) => {
     //res.send('hi, I am a normal text')
     //res.sendFile(__dirname +  '/somefile.txt');
         //res.sendFile(__dirname + '/myhtml/main.html')
-        res.render('main', {name: "about", nav: navObj});
+        res.render('main', {name: "about", nav: navObj, current: 'About'});
     })
 
 
