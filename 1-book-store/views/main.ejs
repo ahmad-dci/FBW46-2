@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= name %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <% nav.forEach(element => {%>
+                    <li> <a href="<%=element.link%>"> <%= element.name %> </a> </li>
+                <%})%>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- div>h1+p>lorem -->
+    <div>
+        <h1><%= name %></h1>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus quas fugiat expedita aperiam debitis sunt ex! Cum nesciunt molestias magni. Suscipit delectus, odio minima fugiat voluptas aperiam excepturi velit nulla.</p>
+        <img src="/imgs/js.png" alt="">
+    </div>
+
+    <%- include('partials/footer', {nav}); %>
+    
+</body>
+</html>

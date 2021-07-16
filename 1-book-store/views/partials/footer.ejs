@@ -1,0 +1,9 @@
+<footer>
+    <!-- ul>li*5>$  -->
+
+    <ul>
+        <% for(let i = 0; i < nav.length; i++) { %>
+            <li> <a href="<%=nav[i].link%>"> <%= nav[i].name %> </a> </li>
+        <%}%>
+    </ul>
+</footer>
