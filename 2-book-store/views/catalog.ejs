@@ -11,7 +11,7 @@ Template 2092 Shelf
 http://www.tooplate.com/view/2092-shelf
 
 -->
-    <title>SHELF - Your Online Bookstore</title>
+    <title><%= title %> </title>
 
     <%- include('partials/css') %>
 </head>
@@ -19,7 +19,7 @@ http://www.tooplate.com/view/2092-shelf
     <body>
         
         <div class="container">
-            <%- include('partials/header') %>
+            <%- include('partials/header', {title}) %>
             
             <div class="tm-main-content">
                 <section class="tm-margin-b-l">
@@ -33,28 +33,9 @@ http://www.tooplate.com/view/2092-shelf
 
                 
             </div>
-
-            <footer>
-                Copyright &copy; <span class="tm-current-year">2018</span> Shelf Company 
-                
-                - Designed by Tooplate
-            </footer>    
+            <%- include('partials/footer') %>
         </div>
-        
-        <!-- load JS files -->
-        <script src="/js/jquery-1.11.3.min.js"></script>         <!-- jQuery (https://jquery.com/download/) -->
-        <script src="/js/popper.min.js"></script>                <!-- Popper (https://popper.js.org/) -->
-        <script src="/js/bootstrap.min.js"></script>             <!-- Bootstrap (https://getbootstrap.com/) -->
-        <script>     
-       
-            $(document).ready(function(){
-                
-                // Update the current year in copyright
-                $('.tm-current-year').text(new Date().getFullYear());
-
-            });
-
-        </script>             
+                         
 
 </body>
 </html>

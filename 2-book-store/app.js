@@ -11,11 +11,15 @@ app.use(express.static(__dirname + '/public'));
 
 app.get('/', (req, res) => {
     //res.send('hi book store');
-    res.render('index');
+    res.render('index', {title: 'Home'});
 })
 
 app.get('/catalog', (req, res) => {
-    res.render('catalog');
+    res.render('catalog', {title: 'Catalog'});
+})
+
+app.get('/contactus', (req, res) => {
+    res.render('contactus', {title: 'Contact Us'});
 })
 
 app.listen(port, () => {
