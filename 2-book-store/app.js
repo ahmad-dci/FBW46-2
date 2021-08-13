@@ -5,6 +5,8 @@ const port = process.env.PORT || 4000;
 
 const app = express();
 
+const {User} = require('./models/helper');
+
 
 // middleware to let the routs get posted data
 app.use(express.urlencoded({extended: true}));
@@ -42,6 +44,10 @@ emailSender.sendEmail(
     }
 })
 
+})
+
+app.post('/signup', (req, res) => {
+    //User.addUser(req.body.fName, req.body.lName, req.body.email, req.body.password, false,  )
 })
 
 app.listen(port, () => {

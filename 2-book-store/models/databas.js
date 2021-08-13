@@ -42,5 +42,63 @@ const userSchema = new Schema({
         unique: true,
         minlength:[5, 'there is no email less than 5 chars'],
         maxlength:[100, 'there is no email more than 100 chars or you need to change your email']
-    }
-})
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    verified: {
+        type: Boolean,
+        required: true
+    },
+    verificationCode: {
+        type: String,
+        required: true
+    } 
+
+});
+// creating user model
+const Users = mongoose.model('users', userSchema);
+
+/*
+Errors Map: 
+3: database connection error
+4: save user to database error
+
+*/
+
+/**
+ * add user to database
+ * @param {String} firstName 
+ * @param {String} lastName 
+ * @param {String} password 
+ * @param {String} email 
+ * @param {Boolean} verified 
+ * @param {String} verificationCode 
+ */
+function addUser(firstName, lastName, password, email, verified, verificationCode) {
+    return new Promise((resolve, reject) => {
+        connect().then(() => {
+            // the connection is done
+            const newUser = new Users({
+                fName: firstName,
+                lName: lastName,
+                password, //same as password: password
+                email,
+                verified,
+                verificationCode
+            });
+            newUser.save().then(result => {
+                resolve(result)
+            }).catch(error => {
+                reject({errorNumber: 4, error})
+            })
+        }).catch(error => {
+            reject({errorNumber: 3, error})
+        })
+    })
+}
+
+module.exports = {
+    addUser
+}
