@@ -134,6 +134,21 @@ http://www.tooplate.com/view/2092-shelf
                 const submitBtn = document.getElementById('submitBtn')
                 submitBtn.addEventListener('click', (e) => {
                     e.preventDefault();
+
+                    const contactName = document.getElementById('contact_name').value;
+                    const contactEmail = document.getElementById('contact_email').value;
+                    const contactMessage = document.getElementById('contact_message').value;
+
+                    fetch('/contactus', {
+                        method: 'POST',
+                        headers:{
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({contactName, contactEmail, contactMessage})
+                    }).then(response => {
+                        // deal with response
+                        
+                    })
                 })
     
             </script>
