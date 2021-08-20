@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 const connectionString = 'mongodb+srv://fbw46_user:1234qwer@cluster0.rmrmn.mongodb.net/fbw46?retryWrites=true&w=majority';
 
@@ -27,21 +28,21 @@ const userSchema = new Schema({
     fName: {
         type: String,
         required: true,
-        minlength:[2, 'there is no first name less than 2 chars'],
-        maxlength:[50, 'there is no first name more than 50 chars or you need to change your name']
+        minlength: [2, 'there is no first name less than 2 chars'],
+        maxlength: [50, 'there is no first name more than 50 chars or you need to change your name']
     },
     lName: {
         type: String,
         required: true,
-        minlength:[2, 'there is no first name less than 2 chars'],
-        maxlength:[50, 'there is no first name more than 50 chars or you need to change your name']
+        minlength: [2, 'there is no first name less than 2 chars'],
+        maxlength: [50, 'there is no first name more than 50 chars or you need to change your name']
     },
     email: {
         type: String,
         required: true,
         unique: true,
-        minlength:[5, 'there is no email less than 5 chars'],
-        maxlength:[100, 'there is no email more than 100 chars or you need to change your email']
+        minlength: [5, 'there is no email less than 5 chars'],
+        maxlength: [100, 'there is no email more than 100 chars or you need to change your email']
     },
     password: {
         type: String,
@@ -54,7 +55,7 @@ const userSchema = new Schema({
     verificationCode: {
         type: String,
         required: true
-    } 
+    }
 
 });
 // creating user model
@@ -64,6 +65,7 @@ const Users = mongoose.model('users', userSchema);
 Errors Map: 
 3: database connection error
 4: save user to database error
+5: password hash error
 
 */
 
@@ -79,22 +81,32 @@ Errors Map:
 function addUser(firstName, lastName, password, email, verified, verificationCode) {
     return new Promise((resolve, reject) => {
         connect().then(() => {
-            // the connection is done
-            const newUser = new Users({
-                fName: firstName,
-                lName: lastName,
-                password, //same as password: password
-                email,
-                verified,
-                verificationCode
-            });
-            newUser.save().then(result => {
-                resolve(result)
-            }).catch(error => {
-                reject({errorNumber: 4, error})
+
+            // encrypt original password and save use
+            bcrypt.hash(password, 10, (err, hashedPassword) => {
+                if (err) {
+                    reject({ errorNumber: 5, err })
+                } else {
+                    // now we can save the user with a hashedPassword
+                    // the connection is done
+                    const newUser = new Users({
+                        fName: firstName,
+                        lName: lastName,
+                        password: hashedPassword,
+                        email,//same as email: email
+                        verified,
+                        verificationCode
+                    });
+                    newUser.save().then(result => {
+                        resolve(result)
+                    }).catch(error => {
+                        reject({ errorNumber: 4, error })
+                    })
+                }
             })
+
         }).catch(error => {
-            reject({errorNumber: 3, error})
+            reject({ errorNumber: 3, error })
         })
     })
 }

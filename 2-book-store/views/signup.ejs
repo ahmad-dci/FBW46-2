@@ -1,82 +1,149 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-<!--
+    <!--
 
 Template 2092 Shelf
 
 http://www.tooplate.com/view/2092-shelf
 
 -->
-    <title><%= title %> </title>
+    <title>
+        <%= title %>
+    </title>
 
     <%- include('partials/css') %>
 </head>
 
-    <body>
-        
-        <div class="container">
-            <%- include('partials/header', {title}) %>
-            
+<body>
+
+    <div class="container">
+        <%- include('partials/header', {title}) %>
+
             <div class="tm-main-content">
                 <section class="tm-margin-b-l">
                     <header>
-                        <h2 class="tm-main-title">Sign Up</h2>    
+                        <h2 class="tm-main-title">Sign Up</h2>
                     </header>
-                    
+
                     <form action="/signup" method="GET" class="tm-contact-form">
                         <div class="form-group">
-                            <input type="text" id="first_name" name="firstName"  class="form-control" placeholder="First Name"  required/>
+                            <input type="text" id="first_name" name="firstName" class="form-control"
+                                placeholder="First Name" required />
                         </div>
                         <div class="form-group">
-                            <input type="text" id="last_name" name="lastName"  class="form-control" placeholder="Last Name"  required/>
+                            <input type="text" id="last_name" name="lastName" class="form-control"
+                                placeholder="Last Name" required />
                         </div>
-                        <div class="form-group">                                                        
-                            <input type="email" id="sign_email" name="signEmail"  class="form-control" placeholder="Email"  required/>
+                        <div class="form-group">
+                            <input type="email" id="sign_email" name="signEmail" class="form-control"
+                                placeholder="Email" required />
                         </div>
-                        <div class="form-group">                                                        
-                            <input type="password" id="sign_password" name="signPassword"  class="form-control" placeholder="password"  required/>
+                        <div class="form-group">
+                            <input type="password" id="sign_password" name="signPassword" class="form-control"
+                                placeholder="password" required />
                         </div>
-                        <div class="form-group">                                                        
-                            <input type="password" id="sign_repassword" name="signRePassword"  class="form-control" placeholder="Re-password"  required/>
+                        <div class="form-group">
+                            <input type="password" id="sign_repassword" name="signRePassword" class="form-control"
+                                placeholder="Re-password" required />
                         </div>
-                        
+
                         <button id="submitBtn" type="submit" class="tm-btn tm-btn-blue float-right">Submit</button>
                     </form>
-                    
+
                 </section>
 
-                
+
             </div>
+
+
+            <!-- error modal start -->
+            <div class="modal" tabindex="-1" role="dialog" id="errorModal">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header bg-danger">
+                      <h5 class="modal-title">Input Errors</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <p id="errorsContainer" ></p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- error modal end  -->
+
             <%- include('partials/footer') %>
-        </div>
+    </div>
 
-        <script>
+    <script>
 
-            document.getElementById('submitBtn').addEventListener('click', e => {
-                e.preventDefault();
-                const fName = document.getElementById('first_name').value;
-                const lName = document.getElementById('last_name').value;
-                const email = document.getElementById('sign_email').value;
-                const password = document.getElementById('sign_password').value;
+        document.getElementById('submitBtn').addEventListener('click', e => {
+            e.preventDefault();
+            const fName = document.getElementById('first_name').value;
+            const lName = document.getElementById('last_name').value;
+            const email = document.getElementById('sign_email').value;
+            const password = document.getElementById('sign_password').value;
+            const repassword = document.getElementById('sign_repassword').value;
+
+            // validate inputs
+            let errorMessage = '';
+
+            if (fName.length < 2 || fName.length > 50) {
+                errorMessage += 'First name should be greater than 2 and less than 50 characters<br>'
+            }
+            if (lName.length < 2 || lName.length > 50) {
+                errorMessage += 'Last name should be greater than 2 and less than 50 characters<br>'
+            }
+            if (email.length < 5 || email.length > 100) {
+                errorMessage += 'Email should be greater than 2 and less than 50 characters<br>'
+            }
+            // email check using regex
+            // const re = new RegExp('^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+            const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            if (!re.test(email.toLowerCase())) {
+                errorMessage += 'Email is not a valid Email<br>';
+            }
+            if (password.length < 8 || password.length > 20) {
+                errorMessage += 'Password should be greater than 2 and less than 50 characters<br>'
+            }
+
+            if(password !== repassword) {
+                errorMessage += 'Password is not match RePassword<br>'
+            }
+
+            if (errorMessage === '') {
                 fetch('/signup', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify( {fName, lName, email, password})
+                    body: JSON.stringify({ fName, lName, email, password })
                 }).then(response => {
                     // here we need to get the response data and show message to the user upon it
-                    
+
                 }).catch(error => {
                     console.log(error);
                 })
-            })
-        </script>
-                         
+            } else {
+                document.getElementById('errorsContainer').innerHTML = errorMessage;
+                $('#errorModal').modal('show')
+            }
+
+        })
+    </script>
+
 
 </body>
+
 </html>
