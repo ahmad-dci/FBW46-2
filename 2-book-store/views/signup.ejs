@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<!--
+
+Template 2092 Shelf
+
+http://www.tooplate.com/view/2092-shelf
+
+-->
+    <title><%= title %> </title>
+
+    <%- include('partials/css') %>
+</head>
+
+    <body>
+        
+        <div class="container">
+            <%- include('partials/header', {title}) %>
+            
+            <div class="tm-main-content">
+                <section class="tm-margin-b-l">
+                    <header>
+                        <h2 class="tm-main-title">Sign Up</h2>    
+                    </header>
+                    
+                    <form action="#" method="post" class="tm-contact-form">
+                        <div class="form-group">
+                            <input type="text" id="first_name"  class="form-control" placeholder="First Name"  required/>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="last_name"  class="form-control" placeholder="Last Name"  required/>
+                        </div>
+                        <div class="form-group">                                                        
+                            <input type="email" id="sign_email"  class="form-control" placeholder="Email"  required/>
+                        </div>
+                        <div class="form-group">                                                        
+                            <input type="password" id="sign_password"  class="form-control" placeholder="password"  required/>
+                        </div>
+                        <div class="form-group">                                                        
+                            <input type="password" id="sign_repassword"  class="form-control" placeholder="Re-password"  required/>
+                        </div>
+                        
+                        <button id="submitBtn" type="submit" class="tm-btn tm-btn-blue float-right">Submit</button>
+                    </form>
+                    
+                </section>
+
+                
+            </div>
+            <%- include('partials/footer') %>
+        </div>
+                         
+
+</body>
+</html>

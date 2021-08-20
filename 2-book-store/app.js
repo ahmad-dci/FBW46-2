@@ -46,6 +46,10 @@ emailSender.sendEmail(
 
 })
 
+app.get('/signup', (req, res) => {
+    res.render('signup', {title: 'Sign Up'})
+})
+
 app.post('/signup', (req, res) => {
     //User.addUser(req.body.fName, req.body.lName, req.body.email, req.body.password, false,  )
 })
