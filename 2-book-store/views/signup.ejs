@@ -27,21 +27,21 @@ http://www.tooplate.com/view/2092-shelf
                         <h2 class="tm-main-title">Sign Up</h2>    
                     </header>
                     
-                    <form action="#" method="post" class="tm-contact-form">
+                    <form action="/signup" method="GET" class="tm-contact-form">
                         <div class="form-group">
-                            <input type="text" id="first_name"  class="form-control" placeholder="First Name"  required/>
+                            <input type="text" id="first_name" name="firstName"  class="form-control" placeholder="First Name"  required/>
                         </div>
                         <div class="form-group">
-                            <input type="text" id="last_name"  class="form-control" placeholder="Last Name"  required/>
+                            <input type="text" id="last_name" name="lastName"  class="form-control" placeholder="Last Name"  required/>
                         </div>
                         <div class="form-group">                                                        
-                            <input type="email" id="sign_email"  class="form-control" placeholder="Email"  required/>
+                            <input type="email" id="sign_email" name="signEmail"  class="form-control" placeholder="Email"  required/>
                         </div>
                         <div class="form-group">                                                        
-                            <input type="password" id="sign_password"  class="form-control" placeholder="password"  required/>
+                            <input type="password" id="sign_password" name="signPassword"  class="form-control" placeholder="password"  required/>
                         </div>
                         <div class="form-group">                                                        
-                            <input type="password" id="sign_repassword"  class="form-control" placeholder="Re-password"  required/>
+                            <input type="password" id="sign_repassword" name="signRePassword"  class="form-control" placeholder="Re-password"  required/>
                         </div>
                         
                         <button id="submitBtn" type="submit" class="tm-btn tm-btn-blue float-right">Submit</button>
@@ -53,6 +53,29 @@ http://www.tooplate.com/view/2092-shelf
             </div>
             <%- include('partials/footer') %>
         </div>
+
+        <script>
+
+            document.getElementById('submitBtn').addEventListener('click', e => {
+                e.preventDefault();
+                const fName = document.getElementById('first_name').value;
+                const lName = document.getElementById('last_name').value;
+                const email = document.getElementById('sign_email').value;
+                const password = document.getElementById('sign_password').value;
+                fetch('/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify( {fName, lName, email, password})
+                }).then(response => {
+                    // here we need to get the response data and show message to the user upon it
+                    
+                }).catch(error => {
+                    console.log(error);
+                })
+            })
+        </script>
                          
 
 </body>

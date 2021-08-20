@@ -47,11 +47,21 @@ emailSender.sendEmail(
 })
 
 app.get('/signup', (req, res) => {
+    // get data using get request
+    // console.log(req.query);
     res.render('signup', {title: 'Sign Up'})
 })
 
 app.post('/signup', (req, res) => {
     //User.addUser(req.body.fName, req.body.lName, req.body.email, req.body.password, false,  )
+    // get data using post request
+    console.log(req.body);
+    const {fName, lName, email, password} = req.body;
+    User.addUser(fName, lName, email, password, false, '0123456789').then(data => {
+        console.log(data);
+    }).catch(error => {
+        console.log(error);
+    })
 })
 
 app.listen(port, () => {
