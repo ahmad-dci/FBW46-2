@@ -63,13 +63,15 @@ const userSchema = new Schema({
 const Users = mongoose.model('users', userSchema);
 
 /*
-Errors Map: 
+Errors Map:
+0: no errors 
 3: database connection error
-4: save user to database error
+4: save user to database error // email is already exist
 5: password hash error
 6: can not find a user with given email
 7: user email is not verified
 8: password does not match the password on database
+9: can not send email
 
 */
 

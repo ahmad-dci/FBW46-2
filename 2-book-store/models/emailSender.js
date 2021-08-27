@@ -33,4 +33,29 @@ function sendEmail(name, email, message, callback) {
   });
 }
 
-module.exports = { sendEmail };
+function sendVerificationEmail(name, email, verificationCode, callback) {
+  const mailOption = {
+    from: "fbw46-2@coding-school.org",
+    to: email,
+    subject: "Email Verification",
+    html:  `
+    <h1> Welcome ${name},</h1>
+    <br>
+    <h2>Please verify your email by clicking the link below:</h2>
+    <a href="http://localhost:4000/emailverification/${verificationCode}">Verify</a>
+    <br>
+    Best Regards
+    `,
+  };
+  transporter.sendMail(mailOption, function (error, info) {
+    if (error) {
+      console.log(error);
+      callback(false);
+    } else {
+      console.log(info.response);
+      callback(true);
+    }
+  });
+}
+
+module.exports = { sendEmail, sendVerificationEmail };

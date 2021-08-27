@@ -1,4 +1,5 @@
 const db = require('./databas');
+const {sendVerificationEmail} = require('./emailSender');
 
 
 
@@ -16,7 +17,14 @@ class User {
     static addUser(fName, lName, email, password, verified, verificationCode) {
         return new Promise((resolve, reject) => {
             db.addUser(fName, lName, password, email, verified, verificationCode).then(result => {
-                resolve(new User(result.id, fName, lName, email, password, verified, verificationCode ))
+                sendVerificationEmail(`${fName} ${lName}`, email, `${result.id}-${verificationCode}`,(ok) =>{
+                    if (ok) {
+                        resolve(new User(result.id, fName, lName, email, password, verified, verificationCode ))
+                    } else {
+                        reject({ errorNumber: 9, error: new Error('can not send email')})
+                    }
+                }) 
+                
             }).catch(error => {
                 reject(error)
             })

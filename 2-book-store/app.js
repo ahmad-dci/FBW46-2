@@ -95,11 +95,14 @@ app.post('/signup', checkSchema(signupSchema), (req, res) => {
     const checkResult = validationResult(req).errors;
     if (checkResult.length === 0) {
         const { fName, lName, email, password } = req.body;
-        User.addUser(fName, lName, email, password, false, '0123456789').then(data => {
-            console.log(data);
-            
+        // get random number contains 10 chars to be used as verificationCode
+        const rndNum = Math.floor(Math.random() * 9999999999) + 1000000000;
+        User.addUser(fName, lName, email, password, false, rndNum.toString()).then(data => {
+            //console.log(data);
+            res.json({errorNumber: 0, error: null});
         }).catch(error => {
-            console.log(error);
+            res.status(400);
+            res.json(error);
         })
     } else {
         res.status(400);

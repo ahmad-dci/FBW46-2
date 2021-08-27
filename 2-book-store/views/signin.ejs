@@ -113,13 +113,13 @@ http://www.tooplate.com/view/2092-shelf
                     body: JSON.stringify({email, password })
                 }).then(response => {
                     // here we need to get the response data and show message to the user upon it
-                    console.log(response);
+                    // console.log(response);
                     if (response.status === 200) {
                         // success
                     } else {
                         if (response.status === 400) {
                             response.json().then(data => {
-                                console.log(data);
+                                // console.log(data);
                                 switch (data.errorNumber) {
                                     case 6:
                                         document.getElementById('errorsContainer').innerHTML = 'your Email is not exist on the system please sign up first';
@@ -145,6 +145,12 @@ http://www.tooplate.com/view/2092-shelf
                     }
 
                 }).catch(error => {
+                    // error gonna happened if 
+                    // there is no internet or 
+                    // website is down or 
+                    // if there is now rout to handel the request on server side
+                    document.getElementById('errorsContainer').innerHTML = 'unknown error ';
+                    $('#errorModal').modal('show')
                     console.log(error);
                 })
             } else {
