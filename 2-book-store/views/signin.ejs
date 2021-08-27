@@ -135,6 +135,8 @@ http://www.tooplate.com/view/2092-shelf
                                         break;
                                 
                                     default:
+                                        document.getElementById('errorsContainer').innerHTML = 'unknown error please contact system Administrator';
+                                        $('#errorModal').modal('show')
                                         break;
                                 }
 
