@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
+
 const connectionString = 'mongodb+srv://fbw46_user:1234qwer@cluster0.rmrmn.mongodb.net/fbw46?retryWrites=true&w=majority';
 
 
@@ -66,6 +67,9 @@ Errors Map:
 3: database connection error
 4: save user to database error
 5: password hash error
+6: can not find a user with given email
+7: user email is not verified
+8: password does not match the password on database
 
 */
 
@@ -111,6 +115,44 @@ function addUser(firstName, lastName, password, email, verified, verificationCod
     })
 }
 
+function checkUser(email, password) {
+    // check user using email
+    // is this user's email is verified
+    // is user password match the password on database
+    // if all passed resolve
+    return new Promise((resolve, reject) => {
+        connect().then(() => {
+            Users.findOne({email}).then(data => {
+                console.log(data);
+                if (data === null) {
+                    reject({errorNumber: 6, error: new Error('can not find a user with given Email')})
+                } else {
+                    if (data.verified === false) {
+                        reject({errorNumber: 7, error: new Error('user email is not verified')})
+                    } else {
+                        bcrypt.compare(password, data.password, (err, result) => {
+                            if (err) {
+                                reject({errorNumber: 5, error: err})
+                            } else {
+                                if (result === false) {
+                                    reject({errorNumber: 8, error: new Error('password does not match the password on the database')})
+                                } else {
+                                    resolve(data);
+                                }
+                            }
+                        })
+                    }
+                }
+            })
+
+        }).catch(error => {
+            console.log(error);
+            reject({ errorNumber: 3, error })
+        })
+    })
+}
+
 module.exports = {
-    addUser
+    addUser,
+    checkUser
 }

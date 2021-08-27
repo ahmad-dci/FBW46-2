@@ -22,6 +22,16 @@ class User {
             })
         })
     }
+
+    static checkUser(email, password) {
+        return new Promise((resolve, reject) => {
+            db.checkUser(email, password).then((user) => {
+                resolve(user);
+            }).catch(error => {
+                reject(error)
+            })
+        })
+    }
 }
 
 module.exports = {

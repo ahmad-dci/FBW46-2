@@ -7,7 +7,6 @@ const port = process.env.PORT || 4000;
 const app = express();
 
 const { User } = require('./models/helper');
-const { json } = require('express');
 
 
 // middleware to let the routs get posted data
@@ -106,6 +105,23 @@ app.post('/signup', checkSchema(signupSchema), (req, res) => {
         res.status(400);
         res.json(checkResult)
     }
+})
+
+app.get('/signin', (req, res) => {
+    res.render('signin', { title: 'Sign in' });
+});
+
+app.post('/signin', (req, res) => {
+    // console.log(req.body);
+    const {email, password} = req.body;
+    User.checkUser(email, password).then(() => {
+        // create session and send success message to front end
+        
+    }).catch(error => {
+        res.status(400);
+        res.json(error);
+    })
+
 })
 
 app.listen(port, () => {
