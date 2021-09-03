@@ -2,7 +2,7 @@ const express = require('express');
 const emailSender = require('./models/emailSender');
 const { body, validationResult, checkSchema } = require('express-validator');
 
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 5500;
 
 const app = express();
 
@@ -126,6 +126,12 @@ app.post('/signin', (req, res) => {
     })
 
 })
+app.get('/emailverification/:data', (req, res) => {
+    //console.log(req.params.data.split('-'));
+    const userId = req.params.data.split('-')[0];
+    const verificationCode = req.params.data.split('-')[1];
+
+});
 
 app.listen(port, () => {
     console.log(`app is running on port ${port}`);

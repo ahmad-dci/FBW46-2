@@ -42,7 +42,7 @@ function sendVerificationEmail(name, email, verificationCode, callback) {
     <h1> Welcome ${name},</h1>
     <br>
     <h2>Please verify your email by clicking the link below:</h2>
-    <a href="http://localhost:4000/emailverification/${verificationCode}">Verify</a>
+    <a href="https://documentserver.ahmad-osman.me/emailverification/${verificationCode}">Verify</a>
     <br>
     Best Regards
     `,
