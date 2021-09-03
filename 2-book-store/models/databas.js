@@ -94,7 +94,7 @@ function addUser(firstName, lastName, password, email, verified, verificationCod
             // encrypt original password and save use
             bcrypt.hash(password, 10, (err, hashedPassword) => {
                 if (err) {
-                    reject({ errorNumber: 5, err })
+                    reject({ errorNumber: 5, error: err })
                 } else {
                     // now we can save the user with a hashedPassword
                     // the connection is done

@@ -1,6 +1,9 @@
 const express = require('express');
-const emailSender = require('./models/emailSender');
 const {  validationResult, checkSchema } = require('express-validator');
+const session = require('express-session');
+
+const emailSender = require('./models/emailSender');
+const adminRout = require('./routes/adminRout');
 
 const port = process.env.PORT || 5500;
 
@@ -8,7 +11,13 @@ const app = express();
 
 const { User } = require('./models/helper');
 
-
+// session configuration
+app.use(session({
+    secret: 'bookstore',
+    // maxAge control the session time by milliseconds
+    // 1000 * 60 * 5 = 5 minutes
+    cookie: {maxAge: 1000 * 60 * 5  }
+  }))
 // middleware to let the routs get posted data
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -17,6 +26,9 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 
 app.use(express.static(__dirname + '/public'));
+// [/admin/changepassword] => inside adminRout = [/changepassword]
+// use adminRout for adminRout [/admin] MEANS [/]
+app.use('/admin', adminRout);
 
 app.get('/', (req, res) => {
     //res.send('hi book store');
@@ -54,7 +66,12 @@ app.post('/contactus', (req, res) => {
 app.get('/signup', (req, res) => {
     // get data using get request
     // console.log(req.query);
-    res.render('signup', { title: 'Sign Up' })
+    if (req.session.user) {
+        res.redirect('/admin')
+    } else {
+        res.render('signup', { title: 'Sign Up' })
+    }
+    
 })
 
 
@@ -111,14 +128,23 @@ app.post('/signup', checkSchema(signupSchema), (req, res) => {
 })
 
 app.get('/signin', (req, res) => {
-    res.render('signin', { title: 'Sign in' });
+    if (req.session.user) {
+        res.redirect('/admin')
+    } else {
+        
+        res.render('signin', { title: 'Sign in' });
+    }
+    
 });
 
 app.post('/signin', (req, res) => {
     // console.log(req.body);
     const {email, password} = req.body;
-    User.checkUser(email, password).then(() => {
+    User.checkUser(email, password).then((user) => {
         // create session and send success message to front end
+        req.session.user = user;
+        res.json({errorNumber: 0, error: null})
+
         
     }).catch(error => {
         res.status(400);

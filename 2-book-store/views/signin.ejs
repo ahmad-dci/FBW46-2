@@ -105,6 +105,9 @@ http://www.tooplate.com/view/2092-shelf
             
 
             if (errorMessage === '') {
+                //disable login button during fetching
+                e.target.disabled = true;
+                e.target.innerHTML = 'Loading ....';
                 fetch('/signin', {
                     method: 'POST',
                     headers: {
@@ -112,10 +115,24 @@ http://www.tooplate.com/view/2092-shelf
                     },
                     body: JSON.stringify({email, password })
                 }).then(response => {
+                    // enable login button after fetching 
+                    e.target.disabled = false;
+                    e.target.innerHTML = 'Login';
                     // here we need to get the response data and show message to the user upon it
                     // console.log(response);
                     if (response.status === 200) {
                         // success
+                        response.json().then(data => {
+                            if(data.errorNumber === 0) {
+                                window.location = '/admin'
+                            } else {
+                                document.getElementById('errorsContainer').innerHTML = 'unknown error with login';
+                            $('#errorModal').modal('show')
+                            }
+                        }).catch(error =>{
+                            document.getElementById('errorsContainer').innerHTML = 'unknown error ';
+                            $('#errorModal').modal('show')
+                        })
                     } else {
                         if (response.status === 400) {
                             response.json().then(data => {
@@ -145,6 +162,9 @@ http://www.tooplate.com/view/2092-shelf
                     }
 
                 }).catch(error => {
+                    // enable login button after fetching 
+                    e.target.disabled = false;
+                    e.target.innerHTML = 'Login';
                     // error gonna happened if 
                     // there is no internet or 
                     // website is down or 
