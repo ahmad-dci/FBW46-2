@@ -72,6 +72,9 @@ Errors Map:
 7: user email is not verified
 8: password does not match the password on database
 9: can not send email
+10: can not find a user with given id
+11: verificationCode in database does not matches the sent verificationCode
+12: user is already verified
 
 */
 
@@ -154,7 +157,44 @@ function checkUser(email, password) {
     })
 }
 
+function verifyEmail(userId, verificationCode) {
+    return new Promise( (resolve, reject) => {
+        //1. get user by id from database
+        //2. check if verificationCode in database MATCHES the sent verificationCode
+        //3. if it matches the verificationCode then check if user is already verified
+        //4. if the user is not verified then verify the user by save true to verified property in Database
+        connect().then(() => {
+            // step number 1
+            Users.findOne({_id: userId}).then(user => {
+                // step number 2
+                if (user.verificationCode === verificationCode) {
+                    // step number 3
+                    if (!user.verified) {
+                        // step number 4
+                        user.verified = true;
+                        user.save().then(() => {
+                            resolve();
+                        }).catch(error => {
+                            reject({ errorNumber: 4, error })
+                        });
+                    } else {
+                        reject({ errorNumber: 12, error: new Error('user is already verified') })
+                    }
+                } else {
+                    reject({ errorNumber: 11, error: new Error('verificationCode in database does not matches the sent verificationCode') })
+                }
+
+            }).catch(error => {
+                reject({ errorNumber: 10, error })
+            })
+        }).catch(error => {
+            reject({ errorNumber: 3, error })
+        })
+    })
+}
+
 module.exports = {
     addUser,
-    checkUser
+    checkUser,
+    verifyEmail
 }

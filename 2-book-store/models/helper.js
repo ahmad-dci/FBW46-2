@@ -40,6 +40,17 @@ class User {
             })
         })
     }
+
+    static verifyEmail(userId, verificationCode) {
+        return new Promise((resolve, reject) => {
+            db.verifyEmail(userId, verificationCode).then(() => {
+                resolve();
+            }).catch(error => {
+                reject(error)
+            })
+        })
+    }
+
 }
 
 module.exports = {

@@ -1,6 +1,6 @@
 const express = require('express');
 const emailSender = require('./models/emailSender');
-const { body, validationResult, checkSchema } = require('express-validator');
+const {  validationResult, checkSchema } = require('express-validator');
 
 const port = process.env.PORT || 5500;
 
@@ -133,7 +133,18 @@ app.get('/emailverification/:data', (req, res) => {
         const verificationCode = req.params.data.split('-')[1];
         if (userId && verificationCode) {
             // check the verification code
-            
+            User.verifyEmail(userId, verificationCode).then(() => {
+                res.send(`your email is verified correctly, you can 
+                <a href="/signin">login</a> now`);
+            }).catch(error => {
+                if (error.errorNumber === 12){
+                    res.send(`your email is already verified , you can 
+                <a href="/signin">login</a> now`);
+                } else {
+                    res.send(`verification error number ${error.errorNumber}. 
+                    please contact the system admin`);
+                }
+            });
         }else {
             res.send(`verification data is wrong please click 
             the link that has been sent to your email`);
