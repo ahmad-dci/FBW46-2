@@ -128,8 +128,19 @@ app.post('/signin', (req, res) => {
 })
 app.get('/emailverification/:data', (req, res) => {
     //console.log(req.params.data.split('-'));
-    const userId = req.params.data.split('-')[0];
-    const verificationCode = req.params.data.split('-')[1];
+    if (req.params.data) {
+        const userId = req.params.data.split('-')[0];
+        const verificationCode = req.params.data.split('-')[1];
+        if (userId && verificationCode) {
+            // check the verification code
+            
+        }else {
+            res.send(`verification data is wrong please click 
+            the link that has been sent to your email`);
+        }
+    } 
+    
+
 
 });
 
